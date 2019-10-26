@@ -1,7 +1,13 @@
 <template>
   <div id="app" class="small-container">
     <h1>Список компаний</h1>
-    <company-form @add:company="addCompany"/>
+    <company-form @add:company='addCompany'/>
+    <button @click='openModal'>Open Modal</button>
+    <modal v-show='isModalOpen' @close='closeModal'>
+      <template v-slot:body>
+        <company-form @add:company='addCompany'/>
+      </template>
+    </modal>
     <companies-table :companies='companies'/>
   </div>
 </template>
@@ -9,13 +15,14 @@
 <script>
   import CompanyForm from '@/components/CompanyForm.vue'
   import CompaniesTable from '@/components/CompaniesTable.vue'
-  
+  import Modal from '@/components/Modal.vue'
 
   export default {
     name: 'app',
     components: {
       CompaniesTable,
       CompanyForm,
+      Modal,
     },
     data(){
       return {
@@ -38,7 +45,8 @@
             regDate:'20.06.2005'
             
           }
-        ]
+        ],
+        isModalOpen:false,
       }
     },
     methods: {
@@ -50,6 +58,12 @@
         const newCompany = { ...company, id };
         this.companies = [...this.companies, newCompany]
       },
+      openModal() {
+            this.isModalOpen = true;
+      },
+      closeModal() {
+            this.isModalOpen = false;
+      }
     }
   }
 </script>
