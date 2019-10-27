@@ -2,13 +2,14 @@
   <div id="app" class="small-container">
     <h1>Список компаний</h1>
     <company-form @add:company='addCompany'/>
-    <button @click='openModal'>Open Modal</button>
+
     <modal v-show='isModalOpen' @close='closeModal'>
       <template v-slot:body>
         <company-form @add:company='addCompany'/>
       </template>
     </modal>
     <companies-table :companies='companies'/>
+    <button @click='openModal' class="add-button"> <plus-circle-icon size="1.5x" class="add-button__icon"></plus-circle-icon> <span class="add-button__text">Добавить новую компанию</span></button>
   </div>
 </template>
 
@@ -16,13 +17,14 @@
   import CompanyForm from '@/components/CompanyForm.vue'
   import CompaniesTable from '@/components/CompaniesTable.vue'
   import Modal from '@/components/Modal.vue'
-
+  import { PlusCircleIcon } from 'vue-feather-icons'
   export default {
     name: 'app',
     components: {
       CompaniesTable,
       CompanyForm,
       Modal,
+      PlusCircleIcon,
     },
     data(){
       return {
@@ -73,8 +75,18 @@
     background: #009435;
     border: 1px solid #009435;
   }
+  .add-button {
+    display:flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  .add-button__text {
+    padding:0px 10px;
+
+  }
 
   .small-container {
-    max-width: 680px;
+    max-width: 900px;
   }
 </style>

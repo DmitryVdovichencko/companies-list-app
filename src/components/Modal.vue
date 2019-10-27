@@ -2,15 +2,13 @@
   <div class="modal-backdrop">
     <div class="modal">
       <slot name="header">
-            This is the default tile!
+        <header class="modal__header">
+            <h2>Добавить новую компанию</h2>
 
-            <button
-                type="button"
-                class="btn-close"
-                @click="close"
-            >
-            x
-            </button>
+      
+            <x-square-icon size="1.5x" class="modal__close" @click="close"></x-square-icon>
+        </header>
+            
       </slot>
 
       <slot name="body">
@@ -23,9 +21,12 @@
 </template>
 
 <script>
+  import { XSquareIcon } from 'vue-feather-icons'
   export default {
     name: 'modal',
-
+    components: {
+      XSquareIcon
+    },
     methods: {
       close() {
         this.$emit('close');
@@ -50,24 +51,29 @@
   .modal {
     background: #FFFFFF;
     box-shadow: 2px 2px 20px 1px;
+    border-radius:5px;
     overflow-x: auto;
     display: flex;
     flex-direction: column;
+    padding:20px 10px;
+  }
+  .modal__close:hover {
+   
+    color:rgb(39, 163, 101);
+    
+
   }
 
-  .modal-header,
-  .modal-footer {
+  .modal__header  {
     padding: 15px;
     display: flex;
-  }
-
-  .modal-header {
-    border-bottom: 1px solid #eeeeee;
-    color: #4AAE9B;
+    flex-flow: row nowrap;
     justify-content: space-between;
   }
 
-  .modal-footer {
+ 
+
+  .modal__footer {
     border-top: 1px solid #eeeeee;
     justify-content: flex-end;
   }
