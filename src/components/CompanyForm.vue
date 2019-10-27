@@ -4,7 +4,7 @@
       <div class="company-form__data">
         <div class="company-form__item" v-for="field in company" :key="field.key">
           <label>{{field.label}}</label>
-          <input v-model='field.value' type="text" :class="{ 'has-error': submitting && (()=> isEmpty('name')) }"  @focus="clearStatus"
+          <input v-model='field.value' type="text" :class="{ 'has-error': submitting && field.error }"  @focus="clearStatus"
     @keypress="clearStatus" />
         </div>
         
@@ -68,25 +68,26 @@
       }
     },
     computed: {
-      isEmpty(prop) {
-        return this.company[prop] === ''
-      },
+
       isSomeEmpty(){
-        const emptyFields = Object.entries(this.company).filter((field)=> field[1]==='')
-        return emptyFields.length > 0
+        Object.values(this.company).forEach((field)=>{
+          field.error = field.value==='';
+        })
+        const emptyFields = Object.values(this.company).filter((field)=>{
+
+          return field.value ==='';
+        })
+        
+        return emptyFields.length === 0
+        
       },
-      invalidName() {
-        return this.company.name === ''
-      },
-      invalidAddress() {
-        return this.company.address === ''
-      },
+
     },
     methods: {
         handleSubmit() {
           this.submitting = true
           this.clearStatus()
-          if (this.isSomeEmpty) {
+          if (!this.isSomeEmpty) {
             this.error = true
             return
           }
