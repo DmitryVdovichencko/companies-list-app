@@ -112,7 +112,7 @@
           this.success = true
           this.submitting = false
           if(this.success){
-            setTimeout(()=> this.clearInputs(),3000)
+            setTimeout(()=> {this.clearInputs()},5000)
           }
           
   
