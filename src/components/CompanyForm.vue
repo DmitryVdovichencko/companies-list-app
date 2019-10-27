@@ -13,20 +13,27 @@
         <button>Добавить компанию</button>
       </div>
       <p v-if="error && submitting" class="error-message">
-        ❗Please fill out all required fields
+       <alert-triangle-icon size="1.5x" class="error-icon"></alert-triangle-icon> {{errorMessage}}
       </p>
       <p v-if="success" class="success-message">
-        ✅ Company successfully added
+         <check-square-icon size="1.5x" class="success-icon"></check-square-icon> Компания успешно добавлена
       </p>
       
     </form>
   </div>
 </template>
 
+
 <script>
-  
+  import { CheckSquareIcon } from 'vue-feather-icons'
+  import { AlertTriangleIcon } from 'vue-feather-icons'
+
   export default {
     name: 'company-form',
+    components: {
+      CheckSquareIcon,
+      AlertTriangleIcon
+    },
     data() {
       return {
         company: {
@@ -64,42 +71,64 @@
         },
         submitting: false,
         error: false,
-        success: false,
+        errorMessage:'',
+        success: false
       }
     },
-    computed: {
+    computed:{
+        isSomeEmpty(){
+          Object.values(this.company).forEach((field)=>{
+            field.error = field.value==='';
+          })
+          const emptyFields = Object.values(this.company).filter((field)=>{
 
-      isSomeEmpty(){
-        Object.values(this.company).forEach((field)=>{
-          field.error = field.value==='';
-        })
-        const emptyFields = Object.values(this.company).filter((field)=>{
-
-          return field.value ==='';
-        })
-        
-        return emptyFields.length === 0
+            return field.value ==='';
+          })
+          
+          return emptyFields.length !== 0
         
       },
-
+      validate(){
+        const messages = {
+          empty:'Пожалуйста заполните все необходимые поля',
+        }
+        if(this.isSomeEmpty) {
+          return{ error:true, message: messages.empty}
+        }
+        return {error:false,message: ''}     
+      },
     },
     methods: {
         handleSubmit() {
           this.submitting = true
           this.clearStatus()
-          if (!this.isSomeEmpty) {
+          if (this.validate.error) {
             this.error = true
+            this.errorMessage = this.validate.message
             return
           }
           this.$emit('add:company', this.company)
           this.error = false
           this.success = true
           this.submitting = false
+          if(this.success){
+            setTimeout(()=> this.clearInputs(),3000)
+          }
+          
+  
+        
+        },
+        clearInputs(){
+          Object.assign(this.$data, this.$options.data.apply(this))
         },
         clearStatus() {
+          
           this.success = false
           this.error = false
+        
         },
+
+
     },
   }
 </script>
@@ -126,5 +155,23 @@
   }
   form {
     margin-bottom: 2rem;
+  }
+  .success-message{
+    display:flex;
+    flex-flow:row nowrap;
+    align-items: center;
+    .success-icon{
+      color:$success;
+      margin-right:10px;
+    }
+  }
+    .error-message{
+    display:flex;
+    flex-flow:row nowrap;
+    align-items: center;
+    .error-icon{
+      color:$error;
+      margin-right:10px;
+    }
   }
 </style>
