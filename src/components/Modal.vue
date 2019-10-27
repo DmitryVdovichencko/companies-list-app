@@ -35,7 +35,7 @@
   };
 </script>
 
-<style>
+<style lang="scss">
   .modal-backdrop {
     position: fixed;
     top: 0;
@@ -59,7 +59,7 @@
   }
   .modal__close:hover {
    
-    color:rgb(39, 163, 101);
+    color:$success ;
     
 
   }

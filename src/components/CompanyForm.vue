@@ -2,31 +2,22 @@
   <div id="company-form" class="company-form">
     <form @submit.prevent="handleSubmit">
       <div class="company-form__data">
-        <div class="company-form__item">
-          <label>Название компании</label>
-          <input v-model='company.name' type="text" />
+        <div class="company-form__item" v-for="field in company" :key="field.key">
+          <label>{{field.label}}</label>
+          <input v-model='field.value' type="text" :class="{ 'has-error': submitting && (()=> isEmpty('name')) }"  @focus="clearStatus"
+    @keypress="clearStatus" />
         </div>
-        <div class="company-form__item">
-          <label>Адрес</label>
-          <input v-model='company.address' type="text" />
-        </div>
-        <div class="company-form__item">
-          <label>ОГРН</label>
-          <input v-model='company.ogrn' type="text" />
-        </div>
-        <div class="company-form__item">
-          <label>ИНН</label>
-          <input v-model='company.inn' type="text" />
-        </div>
-        <div class="company-form__item">
-          <label>Дата регистрации</label>
-          <input v-model='company.regDate' type="text" />
-        </div>
+        
       </div>
       <div class="company-form__actions">
         <button>Добавить компанию</button>
       </div>
-      
+      <p v-if="error && submitting" class="error-message">
+        ❗Please fill out all required fields
+      </p>
+      <p v-if="success" class="success-message">
+        ✅ Company successfully added
+      </p>
       
     </form>
   </div>
@@ -39,23 +30,80 @@
     data() {
       return {
         company: {
-            name:'',
-            address:'',
-            ogrn:'',
-            inn:'',
-            regDate:'',
+            name:{
+              key:'name',
+              label:'Название компании',
+              value:'',
+              error:false,
+            },
+            address:{
+              key:'address',
+              label:'Адрес',
+              value:'',
+              error:false,
+            },
+            ogrn:{
+              key:'ogrn',
+              label:'ОГРН',
+              value:'',
+              error:false,
+            },
+            inn:{
+              key:'inn',
+              label:'ИНН',
+              value:'',
+              error:false,
+            },
+            regDate:{
+              key:'regDate',
+              label:'Дата регистрации',
+              value:'',
+              error:false,
+            },
+
         },
+        submitting: false,
+        error: false,
+        success: false,
       }
+    },
+    computed: {
+      isEmpty(prop) {
+        return this.company[prop] === ''
+      },
+      isSomeEmpty(){
+        const emptyFields = Object.entries(this.company).filter((field)=> field[1]==='')
+        return emptyFields.length > 0
+      },
+      invalidName() {
+        return this.company.name === ''
+      },
+      invalidAddress() {
+        return this.company.address === ''
+      },
     },
     methods: {
         handleSubmit() {
-            this.$emit('add:company', this.company)
+          this.submitting = true
+          this.clearStatus()
+          if (this.isSomeEmpty) {
+            this.error = true
+            return
+          }
+          this.$emit('add:company', this.company)
+          this.error = false
+          this.success = true
+          this.submitting = false
+        },
+        clearStatus() {
+          this.success = false
+          this.error = false
         },
     },
   }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .company-form {
     display:flex;
     flex-flow:column nowrap;

@@ -12,11 +12,11 @@
             </thead>
             <tbody>
                 <tr v-for="company in companies" :key="company.id">
-                    <td>{{ company.name }}</td>
-                    <td>{{ company.address }}</td>
-                    <td>{{ company.ogrn }}</td>
-                    <td>{{ company.inn }}</td>
-                    <td>{{ company.regDate }}</td>
+                    <td>{{ company.name.value }}</td>
+                    <td>{{ company.address.value }}</td>
+                    <td>{{ company.ogrn.value }}</td>
+                    <td>{{ company.inn.value }}</td>
+                    <td>{{ company.regDate.value }}</td>
                 </tr>
             </tbody>
         </table>

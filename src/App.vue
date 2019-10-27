@@ -2,14 +2,14 @@
   <div id="app" class="small-container">
     <h1>Список компаний</h1>
     <company-form @add:company='addCompany'/>
-
+ <button @click='openModal' class="add-button"> <plus-circle-icon size="1.5x" class="add-button__icon"></plus-circle-icon> <span class="add-button__text">Добавить новую компанию</span></button>
     <modal v-show='isModalOpen' @close='closeModal'>
       <template v-slot:body>
         <company-form @add:company='addCompany'/>
       </template>
     </modal>
     <companies-table :companies='companies'/>
-    <button @click='openModal' class="add-button"> <plus-circle-icon size="1.5x" class="add-button__icon"></plus-circle-icon> <span class="add-button__text">Добавить новую компанию</span></button>
+   
   </div>
 </template>
 
@@ -31,22 +31,24 @@
         companies: [
           {
             id:1,
-            name:'RivGauche',
-            address:'Moscow, lenina 2',
-            ogrn:'6586870088',
-            inn:'44890654356',
-            regDate:'24.01.2002'
+            name:{
+              value:'RivGauche'
+              },
+            address:{
+              value:'Moscow, lenina 2'
+              },
+            ogrn:{
+              value:'6586870088',
+            },
+            inn:{
+              value:'44890654356',
+            },
+            regDate:{
+              value:'24.01.2002',
+            }
             
           },
-          {
-            id:2,
-            name:'OZON',
-            address:'Moscow, lenina 5',
-            ogrn:'65832434328',
-            inn:'4482342353254356',
-            regDate:'20.06.2005'
-            
-          }
+
         ],
         isModalOpen:false,
       }
