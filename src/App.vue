@@ -70,19 +70,19 @@
   }
 </script>
 
-<style>
-  button {
-    background: #009435;
-    border: 1px solid #009435;
-  }
+<style lang="scss">
+
   .add-button {
     display:flex;
     flex-flow: row nowrap;
     justify-content: flex-start;
     align-items: center;
+    background: $button-background ;
+    
   }
   .add-button__text {
     padding:0px 10px;
+    
 
   }
 
