@@ -13,31 +13,31 @@
             <tbody>
                 <tr v-for="company in companies" :key="company.id">
                     <td v-if="editing === company.id">
-                        <input type="text" v-model="company.name.value" />
+                        <input type="text" v-model="company.name.value" :class="{ 'has-error': editing && company.name.value === '' }"/>
                     </td>
                     <td v-else>{{ company.name.value }}</td>
                     <td v-if="editing === company.id">
-                        <input type="text" v-model="company.address.value" />
+                        <input type="text" v-model="company.address.value" :class="{ 'has-error': editing && company.address.value === '' }" />
                     </td>
                     <td v-else>{{ company.address.value }}</td>
                     <td v-if="editing === company.id">
-                        <input type="text" v-model="company.ogrn.value" />
+                        <input type="text" v-model="company.ogrn.value" :class="{ 'has-error': editing && company.ogrn.value === '' }"/>
                     </td>
                     <td v-else>{{ company.ogrn.value }}</td>
                     <td v-if="editing === company.id">
-                        <input type="text" v-model="company.inn.value" />
+                        <input type="text" v-model="company.inn.value" :class="{ 'has-error': editing && company.inn.value === '' }"/>
                     </td>
                     <td v-else>{{ company.inn.value }}</td>
                     <td v-if="editing === company.id">
-                        <input type="text" v-model="company.regDate.value" />
+                        <input type="text" v-model="company.regDate.value" :class="{ 'has-error': editing && company.regDate.value === '' }"/>
                     </td>
                     <td v-else>{{ company.regDate.value }}</td>
                     <td v-if="editing === company.id">
-                        <button @click="editCompany(company)">Save</button>
-                        <button class="muted-button" @click="editing = null">Cancel</button>
+                        <button :class="{ 'muted-button ': editing && error }" @click="editCompany(company)">Save</button>
+                        <button class="muted-button" @click="cancelEditing(company)">Cancel</button>
                     </td>
                     <td v-else>
-                        <button @click="editMode(company.id)">Edit</button>
+                        <button @click="editMode(company)">Edit</button>
                         <button @click="$emit('delete:company', company.id)">Delete</button>
                     </td>
                 </tr>
@@ -52,15 +52,25 @@
     data() {
         return {
             editing: null,
+            error:false,
+            savedCompany:null,
         }
     },
-    methods: {
-        editMode(id) {
-            this.editing = id
-        },
 
+    methods: {
+        editMode(company) {
+            this.editing = company.id;
+            this.savedCompany = JSON.parse(JSON.stringify(company))
+        },
+        isEmpty(company){
+            return Object.values(company).some((field)=>field.value === '')
+        },
+        cancelEditing(company){
+            this.$emit('edit:company', company.id, this.savedCompany)
+            this.editing = null
+        },
         editCompany(company) {
-            if (company.name === '' || company.email === '') return
+            if (this.isEmpty(company)) return             
             this.$emit('edit:company', company.id, company)
             this.editing = null
         }

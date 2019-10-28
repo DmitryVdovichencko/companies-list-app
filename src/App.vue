@@ -53,6 +53,7 @@
         isModalOpen:false,
       }
     },
+
     methods: {
       addCompany(company) {
         const lastId = this.companies.length > 0 ? 

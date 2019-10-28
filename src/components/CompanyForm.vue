@@ -78,7 +78,7 @@
     computed:{
         isSomeEmpty(){
           Object.values(this.company).forEach((field)=>{
-            field.error = field.value==='';
+            field.error = field.value === '';
           })
           const emptyFields = Object.values(this.company).filter((field)=>{
 
