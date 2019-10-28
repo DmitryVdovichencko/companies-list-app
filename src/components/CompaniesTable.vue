@@ -12,11 +12,34 @@
             </thead>
             <tbody>
                 <tr v-for="company in companies" :key="company.id">
-                    <td>{{ company.name.value }}</td>
-                    <td>{{ company.address.value }}</td>
-                    <td>{{ company.ogrn.value }}</td>
-                    <td>{{ company.inn.value }}</td>
-                    <td>{{ company.regDate.value }}</td>
+                    <td v-if="editing === company.id">
+                        <input type="text" v-model="company.name.value" />
+                    </td>
+                    <td v-else>{{ company.name.value }}</td>
+                    <td v-if="editing === company.id">
+                        <input type="text" v-model="company.address.value" />
+                    </td>
+                    <td v-else>{{ company.address.value }}</td>
+                    <td v-if="editing === company.id">
+                        <input type="text" v-model="company.ogrn.value" />
+                    </td>
+                    <td v-else>{{ company.ogrn.value }}</td>
+                    <td v-if="editing === company.id">
+                        <input type="text" v-model="company.inn.value" />
+                    </td>
+                    <td v-else>{{ company.inn.value }}</td>
+                    <td v-if="editing === company.id">
+                        <input type="text" v-model="company.regDate.value" />
+                    </td>
+                    <td v-else>{{ company.regDate.value }}</td>
+                    <td v-if="editing === company.id">
+                        <button @click="editCompany(company)">Save</button>
+                        <button class="muted-button" @click="editing = null">Cancel</button>
+                    </td>
+                    <td v-else>
+                        <button @click="editMode(company.id)">Edit</button>
+                        <button @click="$emit('delete:company', company.id)">Delete</button>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -26,10 +49,30 @@
 <script>
   export default {
     name: 'companies-table',
+    data() {
+        return {
+            editing: null,
+        }
+    },
+    methods: {
+        editMode(id) {
+            this.editing = id
+        },
+
+        editCompany(company) {
+            if (company.name === '' || company.email === '') return
+            this.$emit('edit:company', company.id, company)
+            this.editing = null
+        }
+    },
     props: {
         companies: Array,
     },
   }
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+  button {
+    margin: 0 0.5rem 0 0;
+  }
+</style>

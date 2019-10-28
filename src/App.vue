@@ -8,7 +8,7 @@
         <company-form @add:company='addCompany'/>
       </template>
     </modal>
-    <companies-table :companies='companies'/>
+    <companies-table :companies='companies' @delete:company="deleteCompany" @edit:company="editCompany"/>
    
   </div>
 </template>
@@ -61,6 +61,16 @@
         const id = lastId + 1;
         const newCompany = { ...company, id };
         this.companies = [...this.companies, newCompany]
+      },
+      editCompany(id, updatedCompany) {
+        this.companies = this.companies.map(company =>
+          company.id === id ? updatedCompany : company
+        )
+      },
+      deleteCompany(id) {
+        this.companies = this.companies.filter(
+          company => company.id !== id
+        )
       },
       openModal() {
             this.isModalOpen = true;
