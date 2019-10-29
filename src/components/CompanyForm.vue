@@ -12,7 +12,7 @@
   
                 <div v-if="field.label==='ИНН'" class="flex-column">
                              
-                    <label class="flex-row load"><span>{{field.label}} </span><download-cloud-icon size="1.5x" class="load__icon" @click="getData('7707083893')"></download-cloud-icon></label>
+                    <label class="flex-row load">{{field.label}}</label>
                     <input v-model='field.value' type="text" :class="{ 'has-error': submitting && field.error }"  @focus="clearStatus"
                     @keypress="clearStatus" />
                    
@@ -27,9 +27,7 @@
 
         
       </div>
-      <div class="company-form__actions">
-        <button>Добавить компанию</button>
-      </div>
+   
       <p v-if="error && submitting" class="error-message">
        <alert-triangle-icon size="1.5x" class="error-icon"></alert-triangle-icon> {{errorMessage}}
       </p>
@@ -38,6 +36,19 @@
       </p>
       
     </form>
+    <div class="flex-row company-form__actions">   
+       <button @click="getData('7707083893')">
+         <div class="flex-row load-button">
+                <download-cloud-icon size="1.5x" class="load-button__icon" ></download-cloud-icon> 
+          <span class="load-button__text">Загрузить данные компании по ИНН</span> 
+           
+        </div> 
+     
+      </button>   
+   
+        <button @click="handleSubmit">Добавить компанию</button>
+      </div>
+
   </div>
 </template>
 
@@ -232,6 +243,8 @@
     display:flex;
     flex-flow:row nowrap;
     justify-content: flex-end;
+    padding:0px;
+    margin:0px;
   }
   .company-form__actions button{
     margin:0px 5px;
@@ -262,18 +275,25 @@
     margin: auto;
     margin-bottom:0px;
   }
-.load{
- justify-content:space-between;
 
- span{
-   margin:auto;
-   margin-left: 15px;
- }
- .load__icon{
-   margin:auto;
-   margin-right: 5px;
- }
-  
-}
+    .load-button {
+   
+    justify-content: flex-start;
+    align-items: center;
+    
+      .load-button__text {
+    padding:0px 10px;
+    
+
+  }
+        .load-button__icon {
+    margin-left:5px;
+    
+
+  }
+    
+  }
+
+
 
 </style>
