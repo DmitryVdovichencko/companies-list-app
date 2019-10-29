@@ -2,7 +2,7 @@
   <div id="app" class="small-container">
     <h1>Список компаний</h1>
     <company-form @add:company='addCompany'/>
- <button @click='openModal' class="add-button"> <plus-circle-icon size="1.5x" class="add-button__icon"></plus-circle-icon> <span class="add-button__text">Добавить новую компанию</span></button>
+ <button @click='openModal' class="add-button"> <plus-circle-icon size="1.5x" class="add-button__icon"></plus-circle-icon> <span class="add-button__text">Добавить</span></button>
     <modal v-show='isModalOpen' @close='closeModal'>
       <template v-slot:body>
         <company-form @add:company='addCompany'/>
@@ -38,10 +38,10 @@
               value:'Moscow, lenina 2'
               },
             ogrn:{
-              value:'6586870088',
+              value:'1053600591197',
             },
             inn:{
-              value:'44890654356',
+              value:'3664069397',
             },
             regDate:{
               value:'24.01.2002',
@@ -100,6 +100,6 @@
   }
 
   .small-container {
-    max-width: 900px;
+    max-width: 1000px;
   }
 </style>

@@ -3,9 +3,17 @@
     <form @submit.prevent="handleSubmit">
       <div class="company-form__data">
         <div class="company-form__item" v-for="field in company" :key="field.key">
-          <label>{{field.label}}</label>
-          <input v-model='field.value' type="text" :class="{ 'has-error': submitting && field.error }"  @focus="clearStatus"
-    @keypress="clearStatus" />
+            <div class="flex-column">
+              <label>{{field.label}}</label>
+              <input v-model='field.value' type="text" :class="{ 'has-error': submitting && field.error }"  @focus="clearStatus"
+              @keypress="clearStatus" />
+            </div>
+   
+        </div>
+        <div class="flex-column download"  @click="getData('7707083893')" >
+          
+                                <download-cloud-icon size="1.5x" class="custom-class"></download-cloud-icon>
+                            
         </div>
         
       </div>
@@ -25,14 +33,15 @@
 
 
 <script>
-  import { CheckSquareIcon } from 'vue-feather-icons'
-  import { AlertTriangleIcon } from 'vue-feather-icons'
+  import { CheckSquareIcon, DownloadCloudIcon, AlertTriangleIcon } from 'vue-feather-icons'
+  
 
   export default {
     name: 'company-form',
     components: {
       CheckSquareIcon,
-      AlertTriangleIcon
+      AlertTriangleIcon, 
+      DownloadCloudIcon
     },
     data() {
       return {
@@ -118,6 +127,51 @@
   
         
         },
+        async getData(query){
+          const token = "6034ce553132e1c3f7a02bb7a15337d46f941b1a";
+          const serviceUrl = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party";
+          const request = {
+          "query": query
+          };
+          const params = {
+
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+            "Authorization": "Token " + token
+          },
+         body: JSON.stringify(request),
+         
+          }
+         
+          const response = await fetch(serviceUrl,params)
+          const responseObject = await response.json()
+          const dataCompany = await responseObject.suggestions[0]
+          console.log(dataCompany)
+          const dataObject = await {
+              company: {
+            name:{
+               value:dataCompany.data.name.short_with_opf,
+            },
+            address:{
+              value:dataCompany.data.address.value,
+            },
+            ogrn:{
+              value:dataCompany.data.ogrn,
+            },
+            inn:{
+              value:dataCompany.data.inn,
+            },
+            regDate:{
+              value:dataCompany.data.ogrn_date,
+            },
+
+        },
+          }
+          console.log(dataObject)
+          Object.assign(this.$data, dataObject)
+          
+        },
         clearInputs(){
           Object.assign(this.$data, this.$options.data.apply(this))
         },
@@ -132,6 +186,7 @@
     },
   }
 </script>
+
 
 <style scoped lang="scss">
   .company-form {
@@ -174,4 +229,15 @@
       margin-right:10px;
     }
   }
+  .action-button{
+    padding: 10px;
+    margin: auto;
+    margin-bottom:0px;
+  }
+.download{
+  justify-content: flex-end;
+  align-items: flex-end;
+  flex:1;
+  
+}
 </style>
