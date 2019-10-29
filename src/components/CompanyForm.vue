@@ -2,19 +2,29 @@
   <div id="company-form" class="company-form">
     <form @submit.prevent="handleSubmit">
       <div class="company-form__data">
-        <div class="company-form__item" v-for="field in company" :key="field.key">
-            <div class="flex-column">
-              <label>{{field.label}}</label>
-              <input v-model='field.value' type="text" :class="{ 'has-error': submitting && field.error }"  @focus="clearStatus"
-              @keypress="clearStatus" />
+        <div class="company-form__item" v-bind:class="field.key" v-for="field in company" :key="field.key">
+           
+              <div v-if="field.label!=='ИНН'" class="flex-column">            
+                    <label>{{field.label}}</label>
+                    <input v-model='field.value' type="text" :class="{ 'has-error': submitting && field.error }"  @focus="clearStatus"
+                    @keypress="clearStatus" />
+                  </div>  
+  
+                <div v-if="field.label==='ИНН'" class="flex-column">
+                             
+                    <label class="flex-row load"><span>{{field.label}} </span><download-cloud-icon size="1.5x" class="load__icon" @click="getData('7707083893')"></download-cloud-icon></label>
+                    <input v-model='field.value' type="text" :class="{ 'has-error': submitting && field.error }"  @focus="clearStatus"
+                    @keypress="clearStatus" />
+                   
+        
+          
+                               
+                            
+        
             </div>
    
         </div>
-        <div class="flex-column download"  @click="getData('7707083893')" >
-          
-                                <download-cloud-icon size="1.5x" class="custom-class"></download-cloud-icon>
-                            
-        </div>
+
         
       </div>
       <div class="company-form__actions">
@@ -149,25 +159,43 @@
           const dataCompany = await responseObject.suggestions[0]
           console.log(dataCompany)
           const dataObject = await {
-              company: {
+                    company: {
             name:{
-               value:dataCompany.data.name.short_with_opf,
+              key:'name',
+              label:'Название компании',
+              value:dataCompany.data.name.short_with_opf,
+              error:false,
             },
             address:{
+              key:'address',
+              label:'Адрес',
               value:dataCompany.data.address.value,
+              error:false,
             },
             ogrn:{
+              key:'ogrn',
+              label:'ОГРН',
               value:dataCompany.data.ogrn,
+              error:false,
             },
             inn:{
+              key:'inn',
+              label:'ИНН',
               value:dataCompany.data.inn,
+              error:false,
             },
             regDate:{
+              key:'regDate',
+              label:'Дата регистрации',
               value:dataCompany.data.ogrn_date,
+              error:false,
             },
 
-        },
-          }
+        }
+    
+
+        }
+          
           console.log(dataObject)
           Object.assign(this.$data, dataObject)
           
@@ -234,10 +262,18 @@
     margin: auto;
     margin-bottom:0px;
   }
-.download{
-  justify-content: flex-end;
-  align-items: flex-end;
-  flex:1;
+.load{
+ justify-content:space-between;
+
+ span{
+   margin:auto;
+   margin-left: 15px;
+ }
+ .load__icon{
+   margin:auto;
+   margin-right: 5px;
+ }
   
 }
+
 </style>
