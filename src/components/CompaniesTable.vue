@@ -48,11 +48,11 @@
                     </td>
                     <td v-else>
                         <div  class="flex-row action">                        
-                            <button title='Изменить' @click="editMode(company)" class="action-button" >
+                            <button title='Изменить' @click="editMode(company)" class="action-button edit" >
                                 <edit-icon size="1.5x" class="action-button__icon"></edit-icon>
                             </button>
                                 <!-- <button @click="$emit('delete:company', company.id)">Delete</button> -->
-                            <button title='Удалить'  @click="$emit('delete:company', company.id)" class="action-button" >
+                            <button title='Удалить'  @click="$emit('delete:company', company.id)" class="action-button error" >
                                 <trash-2-icon size="1.5x" class="icon"></trash-2-icon>
                             </button>
                         </div>
@@ -114,6 +114,31 @@ import { EditIcon, Trash2Icon, SaveIcon, RotateCcwIcon } from 'vue-feather-icons
   }
   .action-button{
       padding: 10px;
+  }
+  .edit{
+      background: $accent-color;
+      border:$alternate-color;
+      color:$alternate-color; 
+    &:hover{
+        background: $primary-color ;
+        border:$primary-color ;
+    }
+  }
+  .error{
+    background: $error;
+    border:$error;
+    &:hover{
+        background:darken($error, 10%);
+        border:$error;
+    }
+  }
+  .add-button{
+    background:$secondary-color;
+       border:$secondary-color;
+    &:hover{
+        background:darken($secondary-color, 10%);
+        border:$secondary-color;
+    }
   }
   .inn{
      width: 12%; 

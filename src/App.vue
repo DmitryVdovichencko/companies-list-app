@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="small-container">
     <h1>Список компаний</h1>
-    <company-form @add:company='addCompany'/>
+    
  <button @click='openModal' class="add-button"> <plus-circle-icon size="1.5x" class="add-button__icon"></plus-circle-icon> <span class="add-button__text">Добавить</span></button>
     <modal v-show='isModalOpen' @close='closeModal'>
       <template v-slot:body>
@@ -28,28 +28,7 @@
     },
     data(){
       return {
-        companies: [
-          {
-            id:1,
-            name:{
-              value:'RivGauche'
-              },
-            address:{
-              value:'Moscow, lenina 2'
-              },
-            ogrn:{
-              value:'1053600591197',
-            },
-            inn:{
-              value:'3664069397',
-            },
-            regDate:{
-              value:'24.01.2002',
-            }
-            
-          },
-
-        ],
+        companies: [],
         isModalOpen:false,
       }
     },

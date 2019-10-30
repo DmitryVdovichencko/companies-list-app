@@ -4,30 +4,21 @@
       <div class="company-form__data">
         <div class="company-form__item" v-bind:class="field.key" v-for="field in company" :key="field.key">
            
-              <div v-if="field.label!=='ИНН'" class="flex-column">            
+              <div class="flex-column">            
                     <label>{{field.label}}</label>
                     <input v-model='field.value' type="text" :class="{ 'has-error': submitting && field.error }"  @focus="clearStatus"
                     @keypress="clearStatus" />
                   </div>  
   
-                <div v-if="field.label==='ИНН'" class="flex-column">
-                             
-                    <label class="flex-row load">{{field.label}}</label>
-                    <input v-model='field.value' type="text" :class="{ 'has-error': submitting && field.error }"  @focus="clearStatus"
-                    @keypress="clearStatus" />
-                   
-        
-          
-                               
-                            
-        
-            </div>
+
    
         </div>
 
         
       </div>
-   
+     <p v-if="error && loading" class="error-message">
+       <alert-triangle-icon size="1.5x" class="error-icon"></alert-triangle-icon> {{errorMessage}}
+      </p>
       <p v-if="error && submitting" class="error-message">
        <alert-triangle-icon size="1.5x" class="error-icon"></alert-triangle-icon> {{errorMessage}}
       </p>
@@ -37,7 +28,7 @@
       
     </form>
     <div class="flex-row company-form__actions">   
-       <button @click="getData('7707083893')">
+       <button @click="getData(company.inn.value)">
          <div class="flex-row load-button">
                 <download-cloud-icon size="1.5x" class="load-button__icon" ></download-cloud-icon> 
           <span class="load-button__text">Загрузить данные компании по ИНН</span> 
@@ -46,7 +37,7 @@
      
       </button>   
    
-        <button @click="handleSubmit">Добавить компанию</button>
+        <button class="add-button" @click="handleSubmit">Добавить компанию</button>
       </div>
 
   </div>
@@ -100,6 +91,7 @@
 
         },
         submitting: false,
+        loading: false,
         error: false,
         errorMessage:'',
         success: false
@@ -149,6 +141,7 @@
         
         },
         async getData(query){
+          this.loading = true;
           const token = "6034ce553132e1c3f7a02bb7a15337d46f941b1a";
           const serviceUrl = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party";
           const request = {
@@ -166,9 +159,31 @@
           }
          
           const response = await fetch(serviceUrl,params)
+          
+          if (!response.ok){
+            this.clearInputs()
+            this.loading=true
+            this.error=true
+            this.errorMessage='Ошибка соединения с сервером dadata.ru. Попробуйте ввести данные вручную'
+            
+            return
+          }
           const responseObject = await response.json()
           const dataCompany = await responseObject.suggestions[0]
-          console.log(dataCompany)
+          if (dataCompany === undefined){
+            this.clearInputs()
+            this.loading=true
+            this.error=true
+            this.errorMessage='Компания с введенным ИНН не найдена'
+            
+            return
+          }
+          else{
+            this.error=false,
+            this.errorMessage=''
+          }
+          const options = {year: 'numeric', month: 'numeric', day: 'numeric' };
+          const regDateLocal = await new Date(dataCompany.data.ogrn_date).toLocaleString('ru-RU',options)
           const dataObject = await {
                     company: {
             name:{
@@ -198,7 +213,7 @@
             regDate:{
               key:'regDate',
               label:'Дата регистрации',
-              value:dataCompany.data.ogrn_date,
+              value:regDateLocal,
               error:false,
             },
 
@@ -209,6 +224,7 @@
           
           console.log(dataObject)
           Object.assign(this.$data, dataObject)
+          this.loading = false
           
         },
         clearInputs(){
@@ -248,6 +264,7 @@
   }
   .company-form__actions button{
     margin:0px 5px;
+
   }
   form {
     margin-bottom: 2rem;
@@ -274,6 +291,14 @@
     padding: 10px;
     margin: auto;
     margin-bottom:0px;
+  }
+  .add-button{
+    background:$secondary-color;
+       border:$secondary-color;
+    &:hover{
+        background:darken($secondary-color, 10%);
+        border:$secondary-color;
+    }
   }
 
     .load-button {

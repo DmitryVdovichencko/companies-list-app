@@ -59,7 +59,7 @@
   }
   .modal__close:hover {
    
-    color:$success ;
+    color:$error ;
     
 
   }
