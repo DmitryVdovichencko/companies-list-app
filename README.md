@@ -37,7 +37,7 @@
 
 Приложение развернуто на хостинге GitHub Pages по ссылке ниже :point_down:
 
-[Приложение список команий на Vue](https://dmitryvdovichencko.github.io/companies-list-app/)
+[Приложение список компаний на Vue](https://dmitryvdovichencko.github.io/companies-list-app/)
 
 ## Инструкции по развертыванию локальной среды разработки
 
